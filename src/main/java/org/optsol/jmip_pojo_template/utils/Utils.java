@@ -1,10 +1,10 @@
-package org.optsol.jdecor_pojo_template.utils;
+package org.optsol.jmip_pojo_template.utils;
 
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.optsol.jdecor_pojo_template.model.constants.Constants;
-import org.optsol.jdecor_pojo_template.solver.Solution;
+import org.optsol.jmip_pojo_template.model.constants.Constants;
+import org.optsol.jmip_pojo_template.solver.Solution;
 
 @Slf4j
 public final class Utils {
