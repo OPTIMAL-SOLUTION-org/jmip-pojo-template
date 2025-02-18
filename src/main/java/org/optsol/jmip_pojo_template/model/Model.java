@@ -1,18 +1,18 @@
-package org.optsol.jdecor_pojo_template.model;
+package org.optsol.jmip_pojo_template.model;
 
 import com.google.ortools.linearsolver.MPSolver;
 import com.google.ortools.linearsolver.MPVariable;
 import java.util.List;
-import org.optsol.jdecor.core.AbstractVariableManager;
-import org.optsol.jdecor.core.IConstraintManager;
-import org.optsol.jdecor.core.IObjectiveManager;
-import org.optsol.jdecor.ortools.AbstractOrtoolsModelFactory;
-import org.optsol.jdecor.ortools.OrtoolsVariableManager;
-import org.optsol.jdecor.ortools.SolverEngine;
-import org.optsol.jdecor_pojo_template.model.constants.Constants;
-import org.optsol.jdecor_pojo_template.model.constraints.AvailableMetalQuantity;
-import org.optsol.jdecor_pojo_template.model.objective.MaximizeProfit;
-import org.optsol.jdecor_pojo_template.model.variables.Variables;
+import org.optsol.jmip.core.AbstractVariableManager;
+import org.optsol.jmip.core.IConstraintManager;
+import org.optsol.jmip.core.IObjectiveManager;
+import org.optsol.jmip.ortools.AbstractOrtoolsModelFactory;
+import org.optsol.jmip.ortools.OrtoolsVariableManager;
+import org.optsol.jmip.ortools.SolverEngine;
+import org.optsol.jmip_pojo_template.model.constants.Constants;
+import org.optsol.jmip_pojo_template.model.constraints.AvailableMetalQuantity;
+import org.optsol.jmip_pojo_template.model.objective.MaximizeProfit;
+import org.optsol.jmip_pojo_template.model.variables.Variables;
 
 public class Model extends AbstractOrtoolsModelFactory<Constants> {
 

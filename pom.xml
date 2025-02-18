@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.optsol.jdecor</groupId>
-    <artifactId>jdecor-pojo-template</artifactId>
-    <version>0.0.8</version>
+    <groupId>org.optsol.jmip</groupId>
+    <artifactId>jmip-pojo-template</artifactId>
+    <version>1.0.0</version>
 
     <!-- Properties -->
     <properties>
@@ -18,11 +18,11 @@
 
         <java.version>11</java.version>
 
-        <jdecor-version>0.8.0</jdecor-version>
+        <jmip-version>1.4.0</jmip-version>
 
-        <junit-jupiter-version>5.10.1</junit-jupiter-version>
-        <lombok-version>1.18.30</lombok-version>
-        <slf4j-version>2.0.9</slf4j-version>
+        <junit-jupiter-version>5.11.4</junit-jupiter-version>
+        <lombok-version>1.18.36</lombok-version>
+        <slf4j-version>2.0.16</slf4j-version>
     </properties>
 
     <developers>
@@ -40,15 +40,15 @@
         </developer>
     </developers>
 
-    <name>jDecOR Pojo Template</name>
+    <name>jMIP Pojo Template</name>
     <description>...a good point to start your optimization project</description>
     <url>https://github.com/OPTIMAL-SOLUTION-org</url>
 
     <dependencies>
         <dependency>
-            <groupId>org.optsol.jdecor</groupId>
-            <artifactId>jdecor-ortools</artifactId>
-            <version>${jdecor-version}</version>
+            <groupId>org.optsol.jmip</groupId>
+            <artifactId>jmip-ortools</artifactId>
+            <version>${jmip-version}</version>
         </dependency>
 
         <dependency>
@@ -79,7 +79,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.13.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>

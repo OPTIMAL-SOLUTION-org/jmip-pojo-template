@@ -1,15 +1,13 @@
-package org.optsol.jdecor_pojo_template.model.constraints;
+package org.optsol.jmip_pojo_template.model.constraints;
 
 import com.google.ortools.linearsolver.MPConstraint;
-import com.google.ortools.linearsolver.MPSolver;
 import com.google.ortools.linearsolver.MPVariable;
 import java.util.Collection;
 import java.util.HashSet;
-import org.optsol.jdecor.core.AbstractVariableManager;
-import org.optsol.jdecor.core.IVariableProvider;
-import org.optsol.jdecor.ortools.AbstractOrtoolsConstraintManager;
-import org.optsol.jdecor_pojo_template.model.constants.Constants;
-import org.optsol.jdecor_pojo_template.model.variables.Variables;
+import org.optsol.jmip.core.IVariableProvider;
+import org.optsol.jmip.ortools.AbstractOrtoolsConstraintManager;
+import org.optsol.jmip_pojo_template.model.constants.Constants;
+import org.optsol.jmip_pojo_template.model.variables.Variables;
 
 public class AvailableMetalQuantity
     extends AbstractOrtoolsConstraintManager<Constants> {
