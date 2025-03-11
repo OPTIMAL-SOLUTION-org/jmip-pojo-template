@@ -3,27 +3,22 @@ package org.optsol.jmip_pojo_template.model;
 import com.google.ortools.linearsolver.MPSolver;
 import com.google.ortools.linearsolver.MPVariable;
 import java.util.List;
-import org.optsol.jmip.core.AbstractVariableManager;
-import org.optsol.jmip.core.IConstraintManager;
-import org.optsol.jmip.core.IObjectiveManager;
-import org.optsol.jmip.ortools.AbstractOrtoolsModelFactory;
-import org.optsol.jmip.ortools.OrtoolsVariableManager;
-import org.optsol.jmip.ortools.SolverEngine;
+import org.optsol.jmip.core.model.constraints.IConstraint;
+import org.optsol.jmip.core.model.objective.IObjective;
+import org.optsol.jmip.core.model.variables.IVariable;
+import org.optsol.jmip.linearsolver.model.LinearModelFactory;
+import org.optsol.jmip.linearsolver.model.variables.LinearVariable;
 import org.optsol.jmip_pojo_template.model.constants.Constants;
 import org.optsol.jmip_pojo_template.model.constraints.AvailableMetalQuantity;
 import org.optsol.jmip_pojo_template.model.objective.MaximizeProfit;
 import org.optsol.jmip_pojo_template.model.variables.Variables;
 
-public class Model extends AbstractOrtoolsModelFactory<Constants> {
-
-  public Model(SolverEngine solverEngine) {
-    super(solverEngine);
-  }
+public class Model extends LinearModelFactory<Constants> {
 
   @Override
-  protected AbstractVariableManager<MPSolver, MPVariable, Constants> generateVarManager() {
+  protected IVariable<? super Constants, MPSolver, MPVariable> generateVariables() {
     return
-        new OrtoolsVariableManager.Builder()
+        new LinearVariable.Builder<>()
             // x : int+
             .addIntVar(Variables.x)
             .addLowerBound(Variables.x, 0.)
@@ -32,17 +27,12 @@ public class Model extends AbstractOrtoolsModelFactory<Constants> {
   }
 
   @Override
-  protected IObjectiveManager<
-      ? super Constants, MPVariable, MPSolver> generateObjective() {
+  protected IObjective<? super Constants, MPVariable, MPSolver> generateObjective() {
     return new MaximizeProfit();
   }
 
   @Override
-  protected List<
-      IConstraintManager<
-          ? super Constants,
-          MPVariable,
-          MPSolver>> generateConstraints() {
+  protected List<IConstraint<? super Constants, MPVariable, MPSolver>> generateConstraints() {
     return List.of(
         new AvailableMetalQuantity());
   }

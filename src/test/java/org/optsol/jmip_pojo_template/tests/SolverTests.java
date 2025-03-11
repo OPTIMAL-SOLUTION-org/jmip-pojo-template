@@ -1,17 +1,18 @@
 package org.optsol.jmip_pojo_template.tests;
 
+import com.google.ortools.Loader;
+import com.google.ortools.linearsolver.MPSolver;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.optsol.jmip.core.SolutionState;
-import org.optsol.jmip.ortools.OrtoolsModel;
-import org.optsol.jmip.ortools.SolverEngine;
+import org.optsol.jmip.core.solver.solution.SolutionState;
+import org.optsol.jmip.linearsolver.model.LinearModel;
+import org.optsol.jmip.linearsolver.solver.LinearSolver;
 import org.optsol.jmip_pojo_template.model.Model;
 import org.optsol.jmip_pojo_template.model.constants.Constants;
 import org.optsol.jmip_pojo_template.solver.Solution;
-import org.optsol.jmip_pojo_template.solver.Solver;
 import org.optsol.jmip_pojo_template.utils.Utils;
 
 @Slf4j
@@ -22,8 +23,12 @@ public class SolverTests {
     Constants constants = Utils.generateConstants();
 
     try {
-      OrtoolsModel<Constants> model =
-          new Model(SolverEngine.SCIP).buildModel(constants);
+      LinearModel<Constants> model =
+          new Model().buildModel(
+              constants,
+              new MPSolver(
+                  "Testsolver",
+                  MPSolver.OptimizationProblemType.CBC_MIXED_INTEGER_PROGRAMMING));
 
       log.info(model.getSolver().exportModelAsLpFormat());
 
@@ -39,7 +44,12 @@ public class SolverTests {
     Solution solution = null;
     try {
       solution =
-          new Solver(SolverEngine.CBC)
+          LinearSolver.builder(
+                  new Model(),
+                  Solution.class,
+                  MPSolver.OptimizationProblemType.CBC_MIXED_INTEGER_PROGRAMMING)
+              .enableOutput(true)
+              .build()
               .generateSolution(constants);
     } catch (Exception ex) {
       fail(ex);
@@ -57,7 +67,10 @@ public class SolverTests {
     Solution solution = null;
     try {
       solution =
-          new Solver(SolverEngine.SCIP)
+          LinearSolver.builder(
+                  new Model(),
+                  Solution.class,
+                  MPSolver.OptimizationProblemType.SCIP_MIXED_INTEGER_PROGRAMMING).build()
               .generateSolution(constants);
     } catch (Exception ex) {
       fail(ex);
@@ -76,7 +89,10 @@ public class SolverTests {
     Solution solution = null;
     try {
       solution =
-          new Solver(SolverEngine.GUROBI)
+          LinearSolver.builder(
+                  new Model(),
+                  Solution.class,
+                  MPSolver.OptimizationProblemType.GUROBI_MIXED_INTEGER_PROGRAMMING).build()
               .generateSolution(constants);
     } catch (Exception ex) {
       fail(ex);
