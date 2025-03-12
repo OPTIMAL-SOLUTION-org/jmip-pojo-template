@@ -6,14 +6,14 @@ import java.util.List;
 import org.optsol.jmip.core.model.constraints.IConstraint;
 import org.optsol.jmip.core.model.objective.IObjective;
 import org.optsol.jmip.core.model.variables.IVariable;
-import org.optsol.jmip.linearsolver.model.LinearModelFactory;
+import org.optsol.jmip.linearsolver.model.LinearModel;
 import org.optsol.jmip.linearsolver.model.variables.LinearVariable;
 import org.optsol.jmip_pojo_template.model.constants.Constants;
 import org.optsol.jmip_pojo_template.model.constraints.AvailableMetalQuantity;
 import org.optsol.jmip_pojo_template.model.objective.MaximizeProfit;
 import org.optsol.jmip_pojo_template.model.variables.Variables;
 
-public class Model extends LinearModelFactory<Constants> {
+public class Model extends LinearModel<Constants> {
 
   @Override
   protected IVariable<? super Constants, MPSolver, MPVariable> generateVariables() {

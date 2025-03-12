@@ -24,10 +24,9 @@ public class SolverParameterTests {
     try {
       solution =
           LinearSolver.builder(
-                  new Model(),
-                  Solution.class,
-                  MPSolver.OptimizationProblemType.SCIP_MIXED_INTEGER_PROGRAMMING)
-              .enableOutput(true)
+                  Model.class,
+                  Solution.class)
+              .enableOutput()
               .build()
               .generateSolution(constants);
     } catch (Exception ex) {
@@ -47,9 +46,8 @@ public class SolverParameterTests {
     try {
       solution =
           LinearSolver.builder(
-                  new Model(),
-                  Solution.class,
-                  MPSolver.OptimizationProblemType.SCIP_MIXED_INTEGER_PROGRAMMING)
+                  Model.class,
+                  Solution.class)
               .timeLimit(Duration.ofSeconds(3))
               .build()
               .generateSolution(constants);
@@ -70,9 +68,8 @@ public class SolverParameterTests {
     try {
       solution =
           LinearSolver.builder(
-                  new Model(),
-                  Solution.class,
-                  MPSolver.OptimizationProblemType.SCIP_MIXED_INTEGER_PROGRAMMING)
+                  Model.class,
+                  Solution.class)
               .solverSpecificParameters("TODO")
               .build()
               .generateSolution(constants);
@@ -100,9 +97,8 @@ public class SolverParameterTests {
 
       solution =
           LinearSolver.builder(
-                  new Model(),
-                  Solution.class,
-                  MPSolver.OptimizationProblemType.SCIP_MIXED_INTEGER_PROGRAMMING)
+                  Model.class,
+                  Solution.class)
               .solverParameters(mpSolverParameters)
               .build()
               .generateSolution(constants);

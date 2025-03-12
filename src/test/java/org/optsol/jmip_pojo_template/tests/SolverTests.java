@@ -21,12 +21,13 @@ public class SolverTests {
     Constants constants = Utils.generateConstants();
 
     Solution solution = null;
+
     try {
       solution =
           LinearSolver.builder(
-                  new Model(),
-                  Solution.class,
-                  MPSolver.OptimizationProblemType.CBC_MIXED_INTEGER_PROGRAMMING)
+                  Model.class,
+                  Solution.class)
+              .solverEngineType(MPSolver.OptimizationProblemType.CBC_MIXED_INTEGER_PROGRAMMING)
               .build()
               .generateSolution(constants);
     } catch (Exception ex) {
@@ -46,9 +47,10 @@ public class SolverTests {
     try {
       solution =
           LinearSolver.builder(
-                  new Model(),
-                  Solution.class,
-                  MPSolver.OptimizationProblemType.SCIP_MIXED_INTEGER_PROGRAMMING).build()
+                  Model.class,
+                  Solution.class)
+              .solverEngineType(MPSolver.OptimizationProblemType.SCIP_MIXED_INTEGER_PROGRAMMING)
+              .build()
               .generateSolution(constants);
     } catch (Exception ex) {
       fail(ex);
@@ -68,9 +70,10 @@ public class SolverTests {
     try {
       solution =
           LinearSolver.builder(
-                  new Model(),
-                  Solution.class,
-                  MPSolver.OptimizationProblemType.GUROBI_MIXED_INTEGER_PROGRAMMING).build()
+                  Model.class,
+                  Solution.class)
+              .solverEngineType(MPSolver.OptimizationProblemType.GUROBI_MIXED_INTEGER_PROGRAMMING)
+              .build()
               .generateSolution(constants);
     } catch (Exception ex) {
       fail(ex);
