@@ -2,14 +2,17 @@
 
 This project is a minimal example that demonstrates how to use the **_jMIP_** framework to solve a
 mixed-integer program in Java.<br>
-It's just two lines of code to your [optimal solution](https://www.optimal-solution.org/) :wink::
+It's just three lines of code to your [optimal solution](https://www.optimal-solution.org/) :wink::
 
 ```java
 Constants constants =
     new Constants(/*TODO: provide constants*/);
 
+LinearSolver solver =
+    LinearSolver.builder(Model.class, Solution.class).build();
+
 Solution solution =
-    new Solver(SolverEngine.CBC).generateSolution(constants);
+    solver.generateSolution(constants);
 ```
 
 You can fork this project if you want to quickstart your own implementation of an executable MIP/LP
@@ -34,8 +37,8 @@ model.
 <dependencies>
   <dependency>
     <groupId>org.optsol.jmip</groupId>
-    <artifactId>jmip-parent</artifactId>
-    <version>1.4.0</version>
+    <artifactId>jmip-ortools-linearsolver</artifactId>
+    <version>2.0.0</version>
   </dependency>
 </dependencies>
 ```
@@ -196,15 +199,13 @@ x_c
 
 ### 2.1 Model `org.optsol.jmip_pojo_template.model.Model`
 
-**_jMIP_** provides a class for our model definition: `AbstractOrtoolsModelFactory`<br>
+**_jMIP_** provides a class for our model definition: `LinearModel`<br>
 Extending this abstract class requires you to provide:
 
 1. a type parameter defining your available **constants** _(Section 2.2)_
-2. your selection of **solver engine** (CBC/SCIP/GLOP/GUROBI) to the super-constructor _(Section
-   2.3)_
-3. a definition of your **variables** implementing `generateVarManager()` method  _(Section 2.4)_
-4. your definition of the **objective** by overriding `generateObjective()` method _(Section 2.5)_
-5. a list of **constraints** in `generateConstraints()` method _(Section 2.6)_
+2. a definition of your **variables** implementing `generateVariables()` method  _(Section 2.4)_
+3. your definition of the **objective** by overriding `generateObjective()` method _(Section 2.5)_
+4. a list of **constraints** in `generateConstraints()` method _(Section 2.6)_
 
 ### 2.2 Constants `org.optsol.jmip_pojo_template.model.constants.Constants`
 
@@ -215,13 +216,13 @@ Lombok's [@Value](https://projectlombok.org/features/Value)).
 > when you want use different implementations for your constants, for example when having different
 > sources for your instance data.
 
-We use our problem specific `Constants` to parameterize **_jMIP_**'s `AbstractOrtoolsModelFactory`
+We use our problem specific `Constants` to parameterize **_jMIP_**'s `LinearModel`
 
 ```java
-public class Model extends AbstractOrtoolsModelFactory<Constants>
+public class Model extends LinearModel<Constants>
 ```
 
-### 2.3 Solver Engine
+### 2.3 Solver Engine //TODO!!!
 
 **_jMIP_** Framework is based on the
 well-known [Google OR-Tools](https://developers.google.com/optimization). The following solvers are
@@ -258,15 +259,15 @@ public interface Variables {
 }
 ```
 
-Using the builder of the `OrtoolsVariableManager` you can define bounds for groups of variables or
+Using the builder of the `LinearVariable` you can define bounds for groups of variables or
 restrict them to integer values. Any lazily generated variable not restricted in the
-`OrtoolsVariableManager`, will be unbounded and continous by default.
+`LinearVariable.Builder`, will be unbounded and continous by default.
 
 ```java
 @Override
-protected AbstractVariableManager<MPSolver, MPVariable, Constants> generateVarManager() {
+protected IVariable<? super Constants, MPSolver, MPVariable> generateVariables() {
   return
-      new OrtoolsVariableManager.Builder()
+      new LinearVariable.Builder()
           // x : int+
           .addIntVar(Variables.x)
           .addLowerBound(Variables.x, 0.)
@@ -277,7 +278,7 @@ protected AbstractVariableManager<MPSolver, MPVariable, Constants> generateVarMa
 
 ### 2.5 Objective `org.optsol.jmip_pojo_template.model.objective.MaximizeProfit`
 
-Extending **_jMIP_**'s `AbstractOrtoolsObjectiveManager` you can define the objective function of
+Extending **_jMIP_**'s `LinearObjective` you can define the objective function of
 your optimization model. `objective.setMaximization()` or `objective.setMinimization()` sets the
 direction of enhancement.
 
@@ -303,7 +304,7 @@ Finally provide an instance of your objective class in the `generateObjective()`
 
 ```java
 @Override
-protected IObjectiveManager<
+protected IObjective<
     ? super Constants, MPVariable, MPSolver> generateObjective() {
   return new MaximizeProfit();
 }
@@ -312,7 +313,7 @@ protected IObjectiveManager<
 ### 2.6 Constraints `org.optsol.jmip_pojo_template.model.constraints.AvailableMetalQuantity`
 
 Implementation of constraint groups should be based on **_jMIP_**'s
-`AbstractOrtoolsConstraintManager`.
+`LinearConstraint`.
 
 #### This requires three steps for each constraint group:
 
@@ -379,7 +380,7 @@ your `Model`:
 ```java
 @Override
 protected List<
-    IConstraintManager<
+    IConstraint<
         ? super Constants,
         MPVariable,
         MPSolver>> generateConstraints() {
@@ -458,31 +459,33 @@ declared variables.
 > Otherwise, solution retrieval can become quite slow since **_jMIP_** makes heavily use of Java's
 > reflection API under the hood... :wink:
 
-### 3.2 Solver Definition `org.optsol.jmip_pojo_template.solver.Solver`
+### 3.2 Solver Definition and Retrieving Solutions `org.optsol.jmip_pojo_template.tests.SolverTests`
 
-A convenient way to set up a problem specific solver is to extend **_jMIP_**'s `OrtoolsSolver`
-parameterized with your `Constants` and `Solution`. Additionally the solver needs to know your
-choice of solver engine and time limit.
+A convenient way to set up a problem specific solver is to parameterize **_jMIP_**'s `LinearSolver` by using its built-in Builder.
+Provide at least your Model-Definition `Model.class` and Solution-Interface `Solution.class`.
+When calling the Solvers `generateSolution`-Method a new model will be generated from your `Constants` and an optimization will be started to find a `Solution`.
 
-```java
-public Solver(
-    SolverEngine solverEngine,
-    int timelimitSeconds) {
-  super(
-      timelimitSeconds,
-      new Model(solverEngine),
-      Solution.class);
-}
-```
-
-### 3.3 Retrieving Solutions `org.optsol.jmip_pojo_template.tests.SolverTests`
-
-Now it is _really_ just two lines of code to retrieve solutions:
+Now it is _really_ just three lines of code to retrieve solutions:
 
 ```java
 Constants constants =
     new Constants(/*TODO: provide constants*/);
 
+LinearSolver solver =
+    LinearSolver.builder(Model.class, Solution.class).build();
+
 Solution solution =
-    new Solver(SolverEngine.CBC).generateSolution(constants);
+    solver.generateSolution(constants);
 ```
+
+Additionally you may choose a different solver engine or customize some solver parameters such as timelimit, MIP-gap or detailed solver outputs.
+
+```java
+LinearSolver solver =
+    LinearSolver
+        .builder(Model.class, Solution.class)        
+        .solverEngineType(MPSolver.OptimizationProblemType.CBC_MIXED_INTEGER_PROGRAMMING)
+        .relativeMipGap(0.01)
+        .enableOutput().build();
+```
+
