@@ -2,12 +2,12 @@ package org.optsol.jmip_pojo_template.model.objective;
 
 import com.google.ortools.linearsolver.MPObjective;
 import com.google.ortools.linearsolver.MPVariable;
-import org.optsol.jmip.core.IVariableProvider;
-import org.optsol.jmip.ortools.AbstractOrtoolsObjectiveManager;
+import org.optsol.jmip.core.model.variables.IVariableProvider;
+import org.optsol.jmip.linearsolver.model.objective.LinearObjective;
 import org.optsol.jmip_pojo_template.model.constants.Constants;
 import org.optsol.jmip_pojo_template.model.variables.Variables;
 
-public class MaximizeProfit extends AbstractOrtoolsObjectiveManager<Constants> {
+public class MaximizeProfit extends LinearObjective<Constants> {
 
   @Override
   protected void configureObjective(
