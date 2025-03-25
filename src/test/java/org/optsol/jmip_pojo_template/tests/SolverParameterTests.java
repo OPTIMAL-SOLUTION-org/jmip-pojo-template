@@ -38,7 +38,7 @@ public class SolverParameterTests {
   }
 
   @Test
-  public void testSupressOutput() {
+  public void testSuppressOutput() {
     Constants constants = Utils.generateConstants();
 
     Solution solution = null;

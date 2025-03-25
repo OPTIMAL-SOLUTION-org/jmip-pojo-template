@@ -203,9 +203,9 @@ x_c
 Extending this abstract class requires you to provide:
 
 1. a type parameter defining your available **constants** _(Section 2.2)_
-2. a definition of your **variables** implementing `generateVariables()` method  _(Section 2.4)_
-3. your definition of the **objective** by overriding `generateObjective()` method _(Section 2.5)_
-4. a list of **constraints** in `generateConstraints()` method _(Section 2.6)_
+2. a definition of your **variables** implementing `generateVariables()` method  _(Section 2.3)_
+3. your definition of the **objective** by overriding `generateObjective()` method _(Section 2.4)_
+4. a list of **constraints** in `generateConstraints()` method _(Section 2.5)_
 
 ### 2.2 Constants `org.optsol.jmip_pojo_template.model.constants.Constants`
 
@@ -222,31 +222,7 @@ We use our problem specific `Constants` to parameterize **_jMIP_**'s `LinearMode
 public class Model extends LinearModel<Constants>
 ```
 
-### 2.3 Solver Engine //TODO!!!
-
-**_jMIP_** Framework is based on the
-well-known [Google OR-Tools](https://developers.google.com/optimization). The following solvers are
-prepackaged for Windows, Linux and MacOS:
-
-* `SolverEngine.CBC`: [CBC from the CoinOR project](https://github.com/coin-or/Cbc) (mixed-integer)
-* `SolverEngine.SCIP`: [SCIP](https://www.scipopt.org/) (mixed-integer)
-* `SolverEngine.GLOP`: [GLOP](https://developers.google.com/optimization/lp/glop) (linear)
-* `SolverEngine.GUROBI`: [GUROBI](https://www.gurobi.com/) (mixed-integer) | Gurobi is not
-  prepackaged! Gurobi must be installed under standard path on your machine!
-
-> Disclaimer: The usage of certain solver packages may be restricted by an appropriate licensing.
-> Please ensure correct licensing in accordance with the solver provider's usage terms.
-
-**_jMIP_** allows you to select a solver by providing the respective `SolverEngine` enum value to
-the constructor of `AbstractOrtoolsModelFactory`
-
-```java
-public Model(SolverEngine solverEngine) {
-  super(solverEngine);
-}
-```
-
-### 2.4 Variables `org.optsol.jmip_pojo_template.model.variables.Variables`
+### 2.3 Variables `org.optsol.jmip_pojo_template.model.variables.Variables`
 
 **_jMIP_** lazily generates the needed variables based on their names.
 We recommend listing your variable group names in a dedicated class such as an enum or interface.
@@ -276,7 +252,7 @@ protected IVariable<? super Constants, MPSolver, MPVariable> generateVariables()
 }
 ```
 
-### 2.5 Objective `org.optsol.jmip_pojo_template.model.objective.MaximizeProfit`
+### 2.4 Objective `org.optsol.jmip_pojo_template.model.objective.MaximizeProfit`
 
 Extending **_jMIP_**'s `LinearObjective` you can define the objective function of
 your optimization model. `objective.setMaximization()` or `objective.setMinimization()` sets the
@@ -310,7 +286,7 @@ protected IObjective<
 }
 ```
 
-### 2.6 Constraints `org.optsol.jmip_pojo_template.model.constraints.AvailableMetalQuantity`
+### 2.5 Constraints `org.optsol.jmip_pojo_template.model.constraints.AvailableMetalQuantity`
 
 Implementation of constraint groups should be based on **_jMIP_**'s
 `LinearConstraint`.
@@ -459,10 +435,77 @@ declared variables.
 > Otherwise, solution retrieval can become quite slow since **_jMIP_** makes heavily use of Java's
 > reflection API under the hood... :wink:
 
-### 3.2 Solver Definition and Retrieving Solutions `org.optsol.jmip_pojo_template.tests.SolverTests`
+### 3.2 Solver Definition `org.optsol.jmip_pojo_template.tests.SolverParameterTests`
 
 A convenient way to set up a problem specific solver is to parameterize **_jMIP_**'s `LinearSolver` by using its built-in Builder.
 Provide at least your Model-Definition `Model.class` and Solution-Interface `Solution.class`.
+
+```java
+LinearSolver solver =
+    LinearSolver.builder(Model.class, Solution.class).build();
+```
+
+#### 3.2.1 Solver Engine
+
+**_jMIP_** Framework is based on the
+well-known [Google OR-Tools](https://developers.google.com/optimization). The following solvers are
+prepackaged for Windows, Linux and MacOS:
+
+* `MPSolver.OptimizationProblemType.CBC_MIXED_INTEGER_PROGRAMMING`: [CBC from the CoinOR project](https://github.com/coin-or/Cbc) (mixed-integer)
+* `MPSolver.OptimizationProblemType.SCIP_MIXED_INTEGER_PROGRAMMING`: [SCIP](https://www.scipopt.org/) (mixed-integer)
+* `MPSolver.OptimizationProblemType.GLOP_LINEAR_PROGRAMMING`: [GLOP](https://developers.google.com/optimization/lp/glop) (linear)
+* `MPSolver.OptimizationProblemType.GUROBI_MIXED_INTEGER_PROGRAMMING`: [GUROBI](https://www.gurobi.com/) (mixed-integer) | Gurobi is not
+  prepackaged! Gurobi must be installed under standard path on your machine!
+
+> Disclaimer: The usage of certain solver packages may be restricted by an appropriate licensing.
+> Please ensure correct licensing in accordance with the solver provider's usage terms.
+
+#### 3.2.2 Enable Output
+
+Enable detailed Output from the underlying solver-engine.
+```java
+LinearSolver solver =
+    LinearSolver
+        .builder(Model.class, Solution.class)
+        .enableOutput()
+        .build();
+```
+
+#### 3.2.2 Solver TimeLimit
+
+Set a timelimit for the solution process.
+```java
+LinearSolver solver =
+    LinearSolver
+        .builder(Model.class, Solution.class)
+        .timeLimit(Duration.ofSeconds(3))
+        .build();
+```
+
+#### 3.2.3 Solver Mip-Gap
+
+Configure your preferred MIP-Gap.
+```java
+LinearSolver solver =
+    LinearSolver
+        .builder(Model.class, Solution.class)
+        .relativeMipGap(0.05)
+        .build();
+```
+
+#### 3.2.4 Solver Specific String Parameterization
+
+Set a solver specific String Parameter.
+```java
+LinearSolver solver =
+    LinearSolver
+        .builder(Model.class, Solution.class)
+        .solverSpecificParameters("presolving/maxrounds = 0")
+        .build();
+```
+
+### 3.3 Generate Solutions `org.optsol.jmip_pojo_template.tests.SolverTests`
+
 When calling the Solvers `generateSolution`-Method a new model will be generated from your `Constants` and an optimization will be started to find a `Solution`.
 
 Now it is _really_ just three lines of code to retrieve solutions:
