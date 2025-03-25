@@ -3,7 +3,7 @@ package org.optsol.jmip_pojo_template.model.constants;
 import java.util.List;
 import java.util.Map;
 import lombok.Value;
-import org.optsol.jmip.core.IConstants;
+import org.optsol.jmip.core.model.constants.IConstants;
 
 @Value
 public class Constants implements IConstants {

@@ -4,13 +4,13 @@ import com.google.ortools.linearsolver.MPConstraint;
 import com.google.ortools.linearsolver.MPVariable;
 import java.util.Collection;
 import java.util.HashSet;
-import org.optsol.jmip.core.IVariableProvider;
-import org.optsol.jmip.ortools.AbstractOrtoolsConstraintManager;
+import org.optsol.jmip.core.model.variables.IVariableProvider;
+import org.optsol.jmip.linearsolver.model.constraints.LinearConstraint;
 import org.optsol.jmip_pojo_template.model.constants.Constants;
 import org.optsol.jmip_pojo_template.model.variables.Variables;
 
 public class AvailableMetalQuantity
-    extends AbstractOrtoolsConstraintManager<Constants> {
+    extends LinearConstraint<Constants> {
 
   public AvailableMetalQuantity() {
     super("m");
