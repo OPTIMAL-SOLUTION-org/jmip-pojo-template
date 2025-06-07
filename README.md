@@ -38,7 +38,7 @@ model.
   <dependency>
     <groupId>org.optsol.jmip</groupId>
     <artifactId>jmip-ortools-linearsolver</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
   </dependency>
 </dependencies>
 ```
@@ -274,6 +274,7 @@ protected void configureObjective(
   }
 }
 ```
+
 
 Finally provide an instance of your objective class in the `generateObjective()` method of your
 `Model`.
