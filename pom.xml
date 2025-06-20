@@ -18,7 +18,7 @@
 
         <java.version>11</java.version>
 
-        <jmip-version>2.1.0</jmip-version>
+        <jmip-version>2.1.1</jmip-version>
 
         <junit-jupiter-version>5.13.1</junit-jupiter-version>
         <lombok-version>1.18.38</lombok-version>
